@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/wangtrying/AndroidStudioProjects/GinTsai539/app/libs/jsoup-1.8.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="3d57e95c0f150b885ccdbda7a12bef353fd31d02">
+        <dex dex="/Users/wangtrying/AndroidStudioProjects/GinTsai539/app/build/intermediates/pre-dexed/debug/jsoup-1.8.1-dd08e5c6483102dff61beea4f2d202495abdec0d.jar" />
+    </item>
+
+</items>
