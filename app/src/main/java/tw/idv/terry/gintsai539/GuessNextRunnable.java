@@ -16,7 +16,8 @@ public class GuessNextRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            mEngine.run40TimesAndGatherTheStats();
+            mEngine.justGuessOnce();
+//            mEngine.run40TimesAndGatherTheStats();
         } catch (Exception e) {
             e.printStackTrace();
         }

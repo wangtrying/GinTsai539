@@ -16,7 +16,7 @@ public class Engine539 {
 	private NumberGuesser mGuesser;
 
 	private ConcurrentHashMap<Integer, Integer> mAllColdHotNumbers;
-	private ConcurrentHashMap<Integer, Integer> mIanSwanAlready = new ConcurrentHashMap<Integer, Integer>();
+	private ConcurrentHashMap<Integer, Integer> mIanSwanAlready = new ConcurrentHashMap<>();
 	private final int RUN_UPPER_BOUND = 100000;
 
 	private static final int NUMBER_THREADS = 10;
@@ -93,7 +93,7 @@ public class Engine539 {
 				int gotIt3 = 0, gotIt4 = 0, gotIt5 = 0;
 				do {
 					round++;
-					myGuess = NumberGuesser.getInstance().randomGuess(5, mIanSwanAlready);
+					myGuess = NumberGuesser.getInstance().randomGuess();
 					hit = NumberMatcher.match(myGuess, mLastChi);
 					if (hit >= 3) {
 						if (hit == 3) {
@@ -138,8 +138,8 @@ public class Engine539 {
 			}
 
 			private String useTerryMethod() {
-				NumberIChi myGuess = null;
-				int hit = 5;
+				NumberIChi myGuess;
+				int hit;
 				int gotIt3 = 0, gotIt4 = 0, gotIt5 = 0;
 				int round = 0;
 				do {
@@ -183,9 +183,9 @@ public class Engine539 {
 	}
 
     public void run40TimesAndGatherTheStats() {
-        NumberIChi myGuess = null;
+        NumberIChi myGuess;
 
-        HashMap<Integer, Integer> statMap = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> statMap = new HashMap<>();
         for (int i = 0; i<= 39; i++){
             statMap.put(i, 0);
         }
@@ -207,4 +207,10 @@ public class Engine539 {
         }
         this.notifyListeners(result);
     }
+
+	public void justGuessOnce() {
+		NumberIChi myGuess = NumberGuesser.getInstance().guess(5, mAllColdHotNumbers);
+		String result = myGuess.toString();
+		this.notifyListeners(result);
+	}
 }

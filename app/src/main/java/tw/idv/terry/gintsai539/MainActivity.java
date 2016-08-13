@@ -16,9 +16,9 @@ import idv.terry.lotto.lib.IGuessResultListener;
 
 public class MainActivity extends Activity implements IGuessResultListener {
 
-    Button btn1, btn2;
-    TextView textview;
-    Engine539 mEngine;
+    private Button btn1, btn2;
+    private TextView textview;
+    private Engine539 mEngine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +29,20 @@ public class MainActivity extends Activity implements IGuessResultListener {
     }
 
     private void prepareEngines() {
-        mEngine = new Engine539();
-        try {
-            mEngine.start();
-            mEngine.addResultListener(this);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        Runnable engineRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mEngine = new Engine539();
+                try {
+                    mEngine.start();
+                    mEngine.addResultListener(MainActivity.this);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Thread t = new Thread(engineRunnable);
+        t.start();
     }
 
     private void prepareViews() {
