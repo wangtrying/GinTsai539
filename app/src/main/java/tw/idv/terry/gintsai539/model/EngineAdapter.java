@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutionException;
 
 import idv.terry.lotto.lib.Engine539;
 import idv.terry.lotto.lib.IGuessResultListener;
-import tw.idv.terry.gintsai539.ValidateTerryRunnable;
 import tw.idv.terry.gintsai539.presenter.MainActivityPresenter;
 import tw.idv.terry.gintsai539.presenter.NotifyPresenterReason;
 
@@ -46,6 +45,18 @@ public class EngineAdapter implements IGuessResultListener {
 
     public void validateTerryMethodOverRandomMethod() {
         Runnable run = new ValidateTerryRunnable(mEngine);
+        Thread thread = new Thread(run);
+        thread.start();
+    }
+
+    public void guessNext() {
+        Runnable run = new GuessNextRunnable(mEngine);
+        Thread thread = new Thread(run);
+        thread.start();
+    }
+
+    public void bulkGuess() {
+        Runnable run = new BulkGuessNextRunnable(mEngine);
         Thread thread = new Thread(run);
         thread.start();
     }

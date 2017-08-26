@@ -1,22 +1,23 @@
-package tw.idv.terry.gintsai539;
+package tw.idv.terry.gintsai539.model;
 
 import idv.terry.lotto.lib.Engine539;
 
 /**
  * Created by wangtrying on 2015/4/14.
  */
-public class ValidateTerryRunnable implements Runnable {
+public class GuessNextRunnable implements Runnable {
 
     private final Engine539 mEngine;
 
-    public ValidateTerryRunnable(Engine539 aEngine){
+    public GuessNextRunnable(Engine539 aEngine){
         mEngine = aEngine;
     }
 
     @Override
     public void run() {
         try {
-            mEngine.validateTerryMethodOverRandomMethod();
+            mEngine.justGuessOnce();
+//            mEngine.run40TimesAndGatherTheStats();
         } catch (Exception e) {
             e.printStackTrace();
         }

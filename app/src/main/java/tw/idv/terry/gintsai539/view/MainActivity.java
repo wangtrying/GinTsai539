@@ -7,17 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import idv.terry.lotto.lib.Engine539;
-import tw.idv.terry.gintsai539.GuessNextRunnable;
 import tw.idv.terry.gintsai539.R;
 import tw.idv.terry.gintsai539.presenter.MainActivityPresenter;
 
 
 public class MainActivity extends Activity implements IView {
 
-    private Button mValidateButton, mGuessButton;
+    private Button mValidateButton, mGuessButton, mBulkGuessButton;
     private TextView mTextview;
-    private Engine539 mEngine;
     private MainActivityPresenter mPresenter;
 
     @Override
@@ -36,32 +33,42 @@ public class MainActivity extends Activity implements IView {
     private void prepareViews() {
         mValidateButton = (Button) findViewById(R.id.button1);
         mGuessButton = (Button) findViewById(R.id.button2);
+        mBulkGuessButton = (Button) findViewById(R.id.button3);
         mTextview = (TextView) findViewById(R.id.textView);
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.button1) {
                     mTextview.setText("");
-                    mValidateButton.setEnabled(false);
-                    mGuessButton.setEnabled(false);
+                    disableAllButtons();
                     mPresenter.validateTerryMethod();
                 }
                 if (v.getId() == R.id.button2) {
-                    mValidateButton.setEnabled(false);
-                    mGuessButton.setEnabled(false);
+                    disableAllButtons();
                     mTextview.setText("");
-                    GuessNextRunnable run = new GuessNextRunnable(mEngine);
-                    new Thread(run).start();
+                    mPresenter.guessNext();
+                }
+                if (v.getId() == R.id.button3) {
+                    disableAllButtons();
+                    mTextview.setText("");
+                    mPresenter.bulkGuess();
                 }
             }
         };
         mValidateButton.setOnClickListener(onClickListener);
         mGuessButton.setOnClickListener(onClickListener);
+        mBulkGuessButton.setOnClickListener(onClickListener);
+    }
+
+    private void disableAllButtons() {
+        mValidateButton.setEnabled(false);
+        mGuessButton.setEnabled(false);
+        mBulkGuessButton.setEnabled(false);
     }
 
     @Override
     public boolean updateView(UpdateViewReason reason, String resultString) {
-        resetButton();
+        enableAllButtons();
         switch (reason) {
             case NEW_RESULT:
                 updateResult(resultString);
@@ -74,16 +81,16 @@ public class MainActivity extends Activity implements IView {
         return false;
     }
 
-    private void resetButton() {
+    private void enableAllButtons() {
         Runnable run = new Runnable() {
             @Override
             public void run() {
                 mValidateButton.setEnabled(true);
                 mGuessButton.setEnabled(true);
+                mBulkGuessButton.setEnabled(true);
             }
         };
         runOnUiThread(run);
-
     }
 
     private void updateResult(final String resultString) {

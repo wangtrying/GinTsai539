@@ -51,4 +51,12 @@ public class MainActivityPresenter implements IPresenter {
     public void validateTerryMethod() {
         mEngineAdapter.validateTerryMethodOverRandomMethod();
     }
+
+    public void guessNext() {
+        mEngineAdapter.guessNext();
+    }
+
+    public void bulkGuess() {
+        mEngineAdapter.bulkGuess();
+    }
 }

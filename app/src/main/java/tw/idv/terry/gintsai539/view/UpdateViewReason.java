@@ -6,5 +6,5 @@ package tw.idv.terry.gintsai539.view;
 
 public enum UpdateViewReason {
     ENGINE_START_FAIL,
-    NEW_RESULT, ENGINE_STARTED, VALIDATE_FAILS, OTHER_ERROR, VALIDATING,
+    NEW_RESULT, ENGINE_STARTED,
 }
