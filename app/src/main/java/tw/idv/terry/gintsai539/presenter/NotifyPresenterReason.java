@@ -5,5 +5,5 @@ package tw.idv.terry.gintsai539.presenter;
  */
 
 public enum NotifyPresenterReason {
-    NewResult
+    ENGINE_STARTED, ENGINE_START_FAIL, NEW_RESULT
 }

@@ -7,5 +7,5 @@ import android.os.Bundle;
  */
 
 public interface IView {
-    boolean updateView(UpdateViewReason reason, Bundle bundle);
+    boolean updateView(UpdateViewReason reason, String resultString);
 }

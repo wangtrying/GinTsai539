@@ -2,26 +2,21 @@ package tw.idv.terry.gintsai539.view;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import idv.terry.lotto.lib.Engine539;
-import idv.terry.lotto.lib.IGuessResultListener;
 import tw.idv.terry.gintsai539.GuessNextRunnable;
 import tw.idv.terry.gintsai539.R;
-import tw.idv.terry.gintsai539.ValidateTerryRunnable;
 import tw.idv.terry.gintsai539.presenter.MainActivityPresenter;
 
-import static tw.idv.terry.gintsai539.view.UpdateViewReason.EngineStartFail;
-import static tw.idv.terry.gintsai539.view.UpdateViewReason.EngineStarted;
 
+public class MainActivity extends Activity implements IView {
 
-public class MainActivity extends Activity implements IGuessResultListener, IView {
-
-    private Button btn1, btn2;
-    private TextView textview;
+    private Button mValidateButton, mGuessButton;
+    private TextView mTextview;
     private Engine539 mEngine;
     private MainActivityPresenter mPresenter;
 
@@ -29,9 +24,9 @@ public class MainActivity extends Activity implements IGuessResultListener, IVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prepareViews();
         mPresenter = new MainActivityPresenter(this);
         prepareEngines();
-        prepareViews();
     }
 
     private void prepareEngines() {
@@ -39,60 +34,66 @@ public class MainActivity extends Activity implements IGuessResultListener, IVie
     }
 
     private void prepareViews() {
-        btn1 = (Button) findViewById(R.id.button1);
-        btn2 = (Button) findViewById(R.id.button2);
-        textview = (TextView) findViewById(R.id.textView);
+        mValidateButton = (Button) findViewById(R.id.button1);
+        mGuessButton = (Button) findViewById(R.id.button2);
+        mTextview = (TextView) findViewById(R.id.textView);
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.button1) {
-                    textview.setText("");
-                    btn1.setEnabled(false);
-                    btn2.setEnabled(false);
-                    ValidateTerryRunnable run = new ValidateTerryRunnable(mEngine);
-                    new Thread(run).start();
+                    mTextview.setText("");
+                    mValidateButton.setEnabled(false);
+                    mGuessButton.setEnabled(false);
+                    mPresenter.validateTerryMethod();
                 }
                 if (v.getId() == R.id.button2) {
-
-                    btn1.setEnabled(false);
-                    btn2.setEnabled(false);
-                    textview.setText("");
+                    mValidateButton.setEnabled(false);
+                    mGuessButton.setEnabled(false);
+                    mTextview.setText("");
                     GuessNextRunnable run = new GuessNextRunnable(mEngine);
                     new Thread(run).start();
                 }
             }
         };
-        btn1.setOnClickListener(onClickListener);
-        btn2.setOnClickListener(onClickListener);
-    }
-
-
-    @Override
-    public void onResult(final String aResultString) {
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-
-                btn1.setEnabled(true);
-                btn2.setEnabled(true);
-                String str = textview.getText() + "\r\n" + aResultString;
-                textview.setText(str);
-            }
-        };
-        runOnUiThread(r);
+        mValidateButton.setOnClickListener(onClickListener);
+        mGuessButton.setOnClickListener(onClickListener);
     }
 
     @Override
-    public boolean updateView(UpdateViewReason reason, Bundle bundle) {
+    public boolean updateView(UpdateViewReason reason, String resultString) {
+        resetButton();
         switch (reason) {
-            case EngineStartFail:
-                Toast.makeText(this, EngineStartFail.name(), Toast.LENGTH_SHORT).show();
+            case NEW_RESULT:
+                updateResult(resultString);
+                break;
+            default:
+                Log.d("terry", "updateView..." + reason.name());
                 break;
 
-            case EngineStarted:
-                Toast.makeText(this, EngineStarted.name(), Toast.LENGTH_SHORT).show();
-                break;
         }
         return false;
+    }
+
+    private void resetButton() {
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                mValidateButton.setEnabled(true);
+                mGuessButton.setEnabled(true);
+            }
+        };
+        runOnUiThread(run);
+
+    }
+
+    private void updateResult(final String resultString) {
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                String str = mTextview.getText() + "\r\n" + resultString;
+                mTextview.setText(str);
+            }
+        };
+        runOnUiThread(run);
     }
 }

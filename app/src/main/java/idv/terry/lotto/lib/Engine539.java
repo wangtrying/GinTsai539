@@ -171,7 +171,7 @@ public class Engine539 {
 	}
 
 	public void addResultListener(IGuessResultListener aListener) {
-		if (mListeners.contains(aListener) == false) {
+		if (!mListeners.contains(aListener)) {
 			mListeners.add(aListener);
 		}
 	}
